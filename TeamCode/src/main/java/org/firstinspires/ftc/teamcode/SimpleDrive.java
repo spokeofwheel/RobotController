@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 public class SimpleDrive extends OpMode {
     private DcMotor leftDrive;
     private DcMotor rightDrive;
-    private DcMotorEx launch;
+    private DcMotorEx launchMotor;
     private final double launchTpr = 28;
-    private DcMotor intake;
-    private CRServo feeder;
+    private DcMotor intakeMotor;
+    private CRServo feederServo;
 
     double driveSpeedMultiplier = 1;
     ToggleAction launchToggle;
@@ -22,22 +22,22 @@ public class SimpleDrive extends OpMode {
     public void init() {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        launch = hardwareMap.get(DcMotorEx.class, "launch");
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        feeder = hardwareMap.get(CRServo.class, "feeder");
+        launchMotor = hardwareMap.get(DcMotorEx.class, "launch");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        feederServo = hardwareMap.get(CRServo.class, "feeder");
 
         // set rotation directions
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        launch.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.FORWARD);
-        feeder.setDirection(CRServo.Direction.REVERSE);
+        launchMotor.setDirection(DcMotor.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        feederServo.setDirection(CRServo.Direction.REVERSE);
 
         // set zero power behaviour
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         launchToggle = new ToggleAction();
 
@@ -66,22 +66,22 @@ public class SimpleDrive extends OpMode {
         // Apply power to the motors
         leftDrive.setPower(leftPower * driveSpeedMultiplier);
         rightDrive.setPower(rightPower * driveSpeedMultiplier);
-        intake.setPower(1.0);
+        intakeMotor.setPower(1.0);
 
         if (launchToggle.isActive()) {
-            launch.setPower(1.0);
+            launchMotor.setPower(1.0);
             // allow time for launch motor to get up to speed
-            if (launchToggle.getStateDuration() >= 2.5) feeder.setPower(1.0);
+            if (launchToggle.getStateDuration() >= 2.5) feederServo.setPower(1.0);
         } else {
-            launch.setPower(0.0);
-            feeder.setPower(0.0);
+            launchMotor.setPower(0.0);
+            feederServo.setPower(0.0);
         }
 
         // Display telemetry data
-        double launchRpm = (launch.getVelocity() / launchTpr) * 60.0;
+        double launchRpm = (launchMotor.getVelocity() / launchTpr) * 60.0;
         telemetry.addData("Drive", "Left (%.0f%%), Right (%.0f%%)", leftPower * 100, rightPower * 100);
-        telemetry.addData("Intake", "Motor (%.0f%%)", intake.getPower() * 100);
-        telemetry.addData("Launch Mechanism", "Active (%s), Launch (%.0f rpm), Feed (%.0f%%)", launchToggle.isActive(), launchRpm, feeder.getPower() * 100);
+        telemetry.addData("Intake", "Motor (%.0f%%)", intakeMotor.getPower() * 100);
+        telemetry.addData("Launch Mechanism", "Active (%s), Launch (%.0f rpm), Feed (%.0f%%)", launchToggle.isActive(), launchRpm, feederServo.getPower() * 100);
         telemetry.update();
     }
 }
