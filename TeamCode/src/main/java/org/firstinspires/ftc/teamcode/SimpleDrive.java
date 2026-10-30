@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name = "Simple Drive", group = "TeleOp")
 public class SimpleDrive extends OpMode {
@@ -17,6 +18,7 @@ public class SimpleDrive extends OpMode {
 
     double driveSpeedMultiplier = 1;
     ToggleAction launchToggle;
+	ToggleAction intakeDirToggle;
 
     @Override
     public void init() {
@@ -47,7 +49,7 @@ public class SimpleDrive extends OpMode {
 
     @Override
     public void loop() {
-        launchToggle.update(gamepad1.a);
+        launchToggle.update(gamepad1.b);
 
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
