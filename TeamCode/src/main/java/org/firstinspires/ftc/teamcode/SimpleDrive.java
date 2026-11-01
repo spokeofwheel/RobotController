@@ -44,7 +44,7 @@ public class SimpleDrive extends OpMode {
 		launchToggle = new ToggleAction();
 		intakeToggle = new ToggleAction();
 
-        telemetry.addData("Status", "Initialized. Ready to drive!");
+        telemetry.addData("Status", "Initialized.");
         telemetry.update();
     }
 
