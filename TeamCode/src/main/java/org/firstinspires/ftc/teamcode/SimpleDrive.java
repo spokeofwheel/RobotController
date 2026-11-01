@@ -41,7 +41,7 @@ public class SimpleDrive extends OpMode {
         launchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        launchToggle = new ToggleAction();
+		launchToggle = new ToggleAction();
 		intakeToggle = new ToggleAction();
 
         telemetry.addData("Status", "Initialized. Ready to drive!");
