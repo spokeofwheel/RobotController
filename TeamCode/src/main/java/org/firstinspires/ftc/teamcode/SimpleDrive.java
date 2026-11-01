@@ -18,7 +18,7 @@ public class SimpleDrive extends OpMode {
 
     double driveSpeedMultiplier = 1;
     ToggleAction launchToggle;
-	ToggleAction intakeDirToggle;
+	ToggleAction intakeToggle;
 
     @Override
     public void init() {
@@ -42,6 +42,7 @@ public class SimpleDrive extends OpMode {
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         launchToggle = new ToggleAction();
+		intakeToggle = new ToggleAction();
 
         telemetry.addData("Status", "Initialized. Ready to drive!");
         telemetry.update();
@@ -50,6 +51,7 @@ public class SimpleDrive extends OpMode {
     @Override
     public void loop() {
         launchToggle.update(gamepad1.b);
+		intakeToggle.update(gamepad1.a);
 
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
@@ -68,16 +70,21 @@ public class SimpleDrive extends OpMode {
         // Apply power to the motors
         leftDrive.setPower(leftPower * driveSpeedMultiplier);
         rightDrive.setPower(rightPower * driveSpeedMultiplier);
-        intakeMotor.setPower(1.0);
 
         if (launchToggle.isActive()) {
-            launchMotor.setPower(1.0);
+            launchMotor.setPower(0.75);
             // allow time for launch motor to get up to speed
             if (launchToggle.getStateDuration() >= 2.5) feederServo.setPower(1.0);
         } else {
             launchMotor.setPower(0.0);
             feederServo.setPower(0.0);
         }
+
+		if(intakeToggle.isActive()) {
+			intakeMotor.setPower(1.0);
+		} else {
+			intakeMotor.setPower(0.0);
+		}
 
         // Display telemetry data
         double launchRpm = (launchMotor.getVelocity() / launchTpr) * 60.0;
