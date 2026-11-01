@@ -12,7 +12,6 @@ public class SimpleDrive extends OpMode {
     private DcMotor leftDrive;
     private DcMotor rightDrive;
     private DcMotorEx launchMotor;
-    private final double launchTpr = 28;
     private DcMotor intakeMotor;
     private CRServo feederServo;
 
@@ -87,7 +86,7 @@ public class SimpleDrive extends OpMode {
 		}
 
         // Display telemetry data
-        double launchRpm = (launchMotor.getVelocity() / launchTpr) * 60.0;
+        double launchRpm = (launchMotor.getVelocity() / 28) * 60.0;
         telemetry.addData("Drive", "Left (%.0f%%), Right (%.0f%%)", leftPower * 100, rightPower * 100);
         telemetry.addData("Intake", "Motor (%.0f%%)", intakeMotor.getPower() * 100);
         telemetry.addData("Launch Mechanism", "Active (%s), Launch (%.0f rpm), Feed (%.0f%%)", launchToggle.isActive(), launchRpm, feederServo.getPower() * 100);
