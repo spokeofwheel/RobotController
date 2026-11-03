@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import static org.firstinspires.ftc.teamcode.RobotConfig.*;
 
 @TeleOp(name = "Simple Drive", group = "TeleOp")
 public class SimpleDrive extends OpMode {
@@ -17,7 +17,6 @@ public class SimpleDrive extends OpMode {
 	private CRServo leftIntake;
     private CRServo feederServo;
 
-    double driveSpeedMultiplier = 1;
     ToggleAction launchToggle;
 	ToggleAction intakeToggle;
 
@@ -77,7 +76,7 @@ public class SimpleDrive extends OpMode {
         rightDrive.setPower(rightPower * driveSpeedMultiplier);
 
         if (launchToggle.isActive()) {
-            launchMotor.setPower(0.75);
+            launchMotor.setPower(launchSpeed);
             // allow time for launch motor to get up to speed
             if (launchToggle.getStateDuration() >= 2.5) feederServo.setPower(1.0);
         } else {
