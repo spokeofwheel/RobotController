@@ -12,7 +12,9 @@ public class SimpleDrive extends OpMode {
     private DcMotor leftDrive;
     private DcMotor rightDrive;
     private DcMotorEx launchMotor;
-    private DcMotor intakeMotor;
+    private DcMotor centralIntake;
+	private CRServo rightIntake;
+	private CRServo leftIntake;
     private CRServo feederServo;
 
     double driveSpeedMultiplier = 1;
@@ -24,21 +26,25 @@ public class SimpleDrive extends OpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         launchMotor = hardwareMap.get(DcMotorEx.class, "launch");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        centralIntake = hardwareMap.get(DcMotor.class, "intake");
+        rightIntake = hardwareMap.get(CRServo.class, "right_intake");
+        leftIntake = hardwareMap.get(CRServo.class, "left_intake");
         feederServo = hardwareMap.get(CRServo.class, "feeder");
 
         // set rotation directions
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         launchMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        centralIntake.setDirection(DcMotor.Direction.FORWARD);
+        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+        leftIntake.setDirection(DcMotor.Direction.FORWARD);
         feederServo.setDirection(CRServo.Direction.REVERSE);
 
         // set zero power behaviour
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         launchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        centralIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 		launchToggle = new ToggleAction();
 		intakeToggle = new ToggleAction();
@@ -80,16 +86,20 @@ public class SimpleDrive extends OpMode {
         }
 
 		if(intakeToggle.isActive()) {
-			intakeMotor.setPower(1.0);
+			centralIntake.setPower(1.0);
+			rightIntake.setPower(1.0);
+			leftIntake.setPower(1.0);
 		} else {
-			intakeMotor.setPower(0.0);
+			centralIntake.setPower(0.0);
+			rightIntake.setPower(0.0);
+			leftIntake.setPower(0.0);
 		}
 
         // Display telemetry data
         double launchRpm = (launchMotor.getVelocity() / 28) * 60.0;
         telemetry.addData("Drive", "Left (%.0f%%), Right (%.0f%%)", leftPower * 100, rightPower * 100);
-        telemetry.addData("Intake", "Motor (%.0f%%)", intakeMotor.getPower() * 100);
-        telemetry.addData("Launch Mechanism", "Active (%s), Launch (%.0f rpm), Feed (%.0f%%)", launchToggle.isActive(), launchRpm, feederServo.getPower() * 100);
+        telemetry.addData("Intake", "(%s), Left (%.0f%%), Central (%.0f%%), Right (%.0f%%)", intakeToggle.isActive() ? "Active" : "Inactive", leftIntake.getPower() * 100, centralIntake.getPower() * 100, rightIntake.getPower() * 100);
+        telemetry.addData("Launch Mechanism", "(%s), Launch (%.0f rpm), Feed (%.0f%%)", launchToggle.isActive() ? "Active" : "Inactive", launchRpm, feederServo.getPower() * 100);
         telemetry.update();
     }
 }
