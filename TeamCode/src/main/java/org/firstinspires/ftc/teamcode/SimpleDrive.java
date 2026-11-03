@@ -28,6 +28,7 @@ public class SimpleDrive extends OpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         launchMotor = hardwareMap.get(DcMotorEx.class, "launch");
         centralIntake = hardwareMap.get(DcMotor.class, "intake");
+
         rightIntake = hardwareMap.get(CRServo.class, "right_intake");
         leftIntake = hardwareMap.get(CRServo.class, "left_intake");
         feederServo = hardwareMap.get(CRServo.class, "feeder");
